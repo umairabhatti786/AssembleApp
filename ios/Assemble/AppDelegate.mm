@@ -7,7 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  self.moduleName = @"Loyalty";
+  self.moduleName = @"Assemble";
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
