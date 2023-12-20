@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Alert, LogBox, StyleSheet, View, Text } from "react-native";
-import RouteNavigator from "./src/routes/RouteNavigator";
 
 
 
@@ -8,7 +7,10 @@ export const App = () => {
   LogBox.ignoreAllLogs();
 
   return (
-      <RouteNavigator />
+    <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+      <Text>kndkvnk</Text>
+
+    </View>
   );
 };
 

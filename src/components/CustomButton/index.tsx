@@ -25,7 +25,7 @@ const CustomButton = ({ text, onPress, width, height, size, fontFam, elevation, 
             activeOpacity={0.5}
         >
             <View
-                style={{ ...style, width: width || "100%", height: height || 47, backgroundColor: bgColor || colors.primary, justifyContent: "center", alignItems: "center", borderRadius: borderRadius || 12, elevation: elevation, borderWidth: 2, borderColor: borderColor || colors.primary }}
+                style={{ ...style, width: width || "100%", height: height || 47, backgroundColor: bgColor || colors.black, justifyContent: "center", alignItems: "center", borderRadius: borderRadius || 12, elevation: elevation, borderWidth: 2, borderColor: borderColor || colors.black }}
             >
                 <CustomText
                     text={text}

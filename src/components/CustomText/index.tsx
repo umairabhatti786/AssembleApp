@@ -17,7 +17,7 @@ const CustomText = ({ color, size, fontFam, text, style, lineHeight, weight }: P
         <Text
             style={[
                 {
-                    color: color || colors.white,
+                    color: color || colors.black,
                     fontSize: size || 12,
                     fontWeight: weight || 500,
                     fontFamily: fontFam || "Montserrat-SemiBold",
