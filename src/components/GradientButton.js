@@ -14,7 +14,7 @@ import {
 } from "react-native-size-matters";
 import LinearGradient from "react-native-linear-gradient";
 
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 function GradientButton({
   loading,
   title,

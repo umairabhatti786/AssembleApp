@@ -15,7 +15,7 @@ import {
   verticalScale,
 } from "react-native-size-matters";
 import CustomText from "./CustomText";
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 import commonStyles from "../utils/CommonStyles";
 
 import { images } from "../assets/images";

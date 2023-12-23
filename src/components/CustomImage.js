@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { scale } from "react-native-size-matters";
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 import { icons } from "../assets/icons";
 import { images } from "../assets/images";
 import FastImage from "react-native-fast-image";

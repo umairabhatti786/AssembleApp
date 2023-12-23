@@ -1,9 +1,10 @@
 import "react-native-gesture-handler";
 import { View, Text, LogBox, TouchableOpacity, Image } from "react-native";
 import React from "react";
-import RootNavigator from "./src/routes";
 import { Provider } from "react-redux";
+
 import store from "./src/redux/store";
+import RootNavigator from "./src/routes";
 
 // import firebase from '@react-native-firebase/app';
 // import firestore from '@react-native-firebase/firestore';

@@ -13,7 +13,7 @@ import { images } from "../../assets/images";
 import { styles } from "./styles";
 import sizeHelper from "../../assets/helpers/sizeHelper";
 import CustomText from "../../components/CustomText";
-import { colors } from "../../utils/Colors";
+import { colors } from "../../utils/colors";
 import Button from "../../components/Button";
 import { SFCompact } from "../../utils/Fonts";
 import { CrossIcon, HeartIcon, ProfileIcon } from "../../assets/SVG/svg";

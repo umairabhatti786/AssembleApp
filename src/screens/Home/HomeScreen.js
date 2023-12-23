@@ -20,7 +20,7 @@ import {
   UnFillHeartIcon,
 } from "../../assets/SVG/svg";
 import CustomText from "../../components/CustomText";
-import { colors } from "../../utils/Colors";
+import { colors } from "../../utils/colors";
 import { Modalize } from "react-native-modalize";
 import { useFocusEffect } from "@react-navigation/native";
 import Card from "../../components/Card";

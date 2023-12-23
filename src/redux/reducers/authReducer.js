@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {RootState} from '../store';
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 const initialState = {
   allViewIds: [],
@@ -7,12 +7,12 @@ const initialState = {
   isBioVerified: false,
   isFirstLogin: false,
   notificationAlert: false,
-  createPostLocation: '',
-  currentLocation: '',
+  createPostLocation: "",
+  currentLocation: "",
   positionsAndSkills: [],
 };
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     authData: (state, action) => {
@@ -21,7 +21,7 @@ const authSlice = createSlice({
     setIsBioVerified: (state, action) => {
       state.isBioVerified = action.payload;
     },
-    setLogOut: state => {
+    setLogOut: (state) => {
       state.currentUser = initialState.currentUser;
     },
     setNotificationAlert: (state, action) => {

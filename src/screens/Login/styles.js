@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 import { scale, ScaledSheet, verticalScale } from "react-native-size-matters";
-import { colors } from "../../utils/Colors";
+import { colors } from "../../utils/colors";
 import sizeHelper from "../../assets/helpers/sizeHelper";
 const { height, width } = Dimensions.get("window");
 export const styles = ScaledSheet.create({

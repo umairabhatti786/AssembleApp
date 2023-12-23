@@ -6,7 +6,7 @@ import {
 } from "react-native-size-matters";
 import { Platform, View } from "react-native";
 import styled from "react-native-styled-components";
-import { colors } from "./Colors";
+import { colors } from "./colors";
 
 const commonStyles = ScaledSheet.create({
   container: {

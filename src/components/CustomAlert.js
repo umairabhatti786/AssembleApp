@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Dimensions } from "react-native";
 import React from "react";
 import CustomText from "./CustomText";
 
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 import { Spacer } from "./Spacer";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import SepratorLine from "./SepratorLine";

@@ -14,7 +14,7 @@ import {
   moderateScale,
 } from "react-native-size-matters";
 
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 
 function CustomButton({
   loading,

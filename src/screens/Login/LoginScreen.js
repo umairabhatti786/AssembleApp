@@ -14,7 +14,7 @@ import { IPhoneIcon } from "../../assets/SVG/svg";
 import { styles } from "./styles";
 import sizeHelper from "../../assets/helpers/sizeHelper";
 import { SFCompact } from "../../utils/Fonts";
-import { colors } from "../../utils/Colors";
+import { colors } from "../../utils/colors";
 
 const LoginScreen = ({ navigation }) => {
   const onPressGoogle = () => {

@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 import { CalanderIcon, ForwardIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";

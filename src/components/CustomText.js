@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import React from "react";
 import { verticalScale, scale, moderateScale } from "react-native-size-matters";
 // import colors from '../../Utils/colors';
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 
 function CustomText(props) {
   return (

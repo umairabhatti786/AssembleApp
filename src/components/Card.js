@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { ImageBackground } from "react-native";
-import { colors } from "../utils/Colors";
+import { colors } from "../utils/colors";
 import { images } from "../assets/images";
 import { FillHeartIcon, UnFillHeartIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
