@@ -7,7 +7,7 @@ const { height, width } = Dimensions.get("window");
 export const styles = ScaledSheet.create({
   flex: {
     height: 300,
-    width: 400,
+    width: "98%",
   },
   headerContainer: {
     flexDirection: "row",

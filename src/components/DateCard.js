@@ -15,7 +15,7 @@ const DateCard = ({ item }) => {
         alignItems: "center",
         backgroundColor: colors.white,
         padding: 10,
-        width: 400,
+        width: "100%",
       }}
     >
       <View

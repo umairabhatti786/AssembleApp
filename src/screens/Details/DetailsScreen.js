@@ -28,9 +28,12 @@ import {
 } from "../../assets/SVG/svg";
 import DateCard from "../../components/DateCard";
 import LocationCard from "../../components/LocationCard";
+import MapComponent from "../../components/MapComponent";
 const DetailsScreen = ({ navigation, route }) => {
   const item = route.params;
-
+  const latitude = 37.7749; // Replace with your latitude
+  const longitude = -122.4194; // Replace with your longitude
+  const iosLink = "http://maps.apple.com/?ll=37.7749,-122.4194";
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -72,9 +75,11 @@ const DetailsScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={commonStyles.main}>
       <ScrollView
-        contentContainerStyle={{
-          alignItems: "center",
-        }}
+        contentContainerStyle={
+          {
+            // alignItems: "center",
+          }
+        }
         style={{
           flex: 1,
           backgroundColor: colors.white,
@@ -83,50 +88,61 @@ const DetailsScreen = ({ navigation, route }) => {
         <View
           style={{
             justifyContent: "center",
-            marginVertical: 10,
+            // marginVertical: 10,
             alignItems: "center",
           }}
         >
-          <ImageBackground
-            style={styles.flex}
-            source={images.details}
-            imageStyle={{ borderRadius: 20 }}
+          <View
+            style={{
+              width: "100%",
+              marginHorizontal: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 10,
+            }}
           >
-            <Header />
-            <View
-              style={{
-                top: 150,
-                left: 10,
-                right: 0,
-              }}
+            <ImageBackground
+              style={styles.flex}
+              source={images.details}
+              imageStyle={{ borderRadius: 20, height: 300, width: "100%" }}
+              resizeMode="cover"
             >
-              <View style={styles.tagsContainer}>
-                {item.tag1 && (
-                  <View style={styles.tagBody}>
-                    <View style={{ padding: 5 }}>
-                      <Text style={styles.tagName}>{item.tag1}</Text>
+              <Header />
+              <View
+                style={{
+                  top: 150,
+                  left: 10,
+                  right: 0,
+                }}
+              >
+                <View style={styles.tagsContainer}>
+                  {item.tag1 && (
+                    <View style={styles.tagBody}>
+                      <View style={{ padding: 5 }}>
+                        <Text style={styles.tagName}>{item.tag1}</Text>
+                      </View>
                     </View>
-                  </View>
-                )}
+                  )}
 
-                {item.tag2 && (
-                  <View style={styles.tagBody}>
-                    <View style={{ padding: 5 }}>
-                      <Text style={styles.tagName}>{item.tag2}</Text>
+                  {item.tag2 && (
+                    <View style={styles.tagBody}>
+                      <View style={{ padding: 5 }}>
+                        <Text style={styles.tagName}>{item.tag2}</Text>
+                      </View>
                     </View>
-                  </View>
-                )}
-                {item.tag3 && (
-                  <View style={styles.tagBody}>
-                    <View style={{ padding: 5 }}>
-                      <Text style={styles.tagName}>{item.tag3}</Text>
+                  )}
+                  {item.tag3 && (
+                    <View style={styles.tagBody}>
+                      <View style={{ padding: 5 }}>
+                        <Text style={styles.tagName}>{item.tag3}</Text>
+                      </View>
                     </View>
-                  </View>
-                )}
+                  )}
+                </View>
               </View>
-            </View>
-          </ImageBackground>
-          <View style={{ margin: 10 }}>
+            </ImageBackground>
+          </View>
+          <View style={{ padding: 20, width: "100%" }}>
             <CustomText
               label={item.name}
               fontSize={16}
@@ -134,19 +150,28 @@ const DetailsScreen = ({ navigation, route }) => {
               fontFamily={SFCompact.regular}
             />
           </View>
-          <DateCard item={item} />
           <View
             style={{
-              height: 1,
-              backgroundColor: "#F0EBD9",
-              marginHorizontal: 20,
-              borderWidth: 0.5,
-              marginVertical: 10,
-              borderColor: "#F0EBD9",
-              width: 350,
+              width: "100%",
+              justifyContent: "center",
+              backgroundColor: colors.white,
+              padding: 20,
             }}
-          />
-          <LocationCard item={item} />
+          >
+            <DateCard item={item} />
+            <View
+              style={{
+                height: 1,
+                backgroundColor: "#F0EBD9",
+                marginHorizontal: 20,
+                borderWidth: 0.5,
+                marginVertical: 10,
+                borderColor: "#F0EBD9",
+                width: 350,
+              }}
+            />
+            <LocationCard item={item} />
+          </View>
         </View>
 
         <View
@@ -168,6 +193,9 @@ const DetailsScreen = ({ navigation, route }) => {
               fontFamily={SFCompact.light}
               fontSize={15}
             />
+          </View>
+          <View style={{ backgroundColor: "red", height: 300, width: 400 }}>
+            <MapComponent latitude={latitude} longitude={longitude} />
           </View>
         </View>
         <View></View>
