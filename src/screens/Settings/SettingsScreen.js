@@ -61,7 +61,7 @@ const SettingsScreen = ({ navigation }) => {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            top: sizeHelper.screenWidth > 450 ? "30%" : "20%",
+            top: sizeHelper.screenWidth > 450 ? "15%" : "20%",
           }}
         >
           <View style={{ margin: 20 }}>

@@ -31,6 +31,7 @@ import LocationCard from "../../components/LocationCard";
 import MapComponent from "../../components/MapComponent";
 const DetailsScreen = ({ navigation, route }) => {
   const item = route.params;
+  console.log("item", item);
   const latitude = 37.7749; // Replace with your latitude
   const longitude = -122.4194; // Replace with your longitude
   const iosLink = "http://maps.apple.com/?ll=37.7749,-122.4194";
@@ -194,11 +195,51 @@ const DetailsScreen = ({ navigation, route }) => {
               fontSize={15}
             />
           </View>
-          <View style={{ height: 300, width: 400 }}>
-            <MapComponent latitude={latitude} longitude={longitude} />
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#F8F8F8",
+              justifyContent: "center",
+              // alignItems: "center",
+              borderRadius: 20,
+            }}
+          >
+            <View
+              style={{
+                height: 400,
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+              }}
+            >
+              <MapComponent latitude={latitude} longitude={longitude} />
+            </View>
+
+            <CustomText
+              label={item?.locationName ? item.locationName : ""}
+              color="#1C1916"
+              fontFamily={SFCompact.light}
+              fontSize={13}
+              textAlign="center"
+              alignSelf="center"
+            />
+          </View>
+          <View style={{ marginVertical: 10 }}>
+            <Button
+              text={"GET TICKETS"}
+              color={colors.white}
+              fontSize={17}
+              height={65}
+              width={"100%"}
+              backgroundColor={"#080808"}
+              borderRadius={100}
+              margin={20}
+              fontFamily={SFCompact.semiBold}
+              // onPress={SubmitLogin}
+            />
           </View>
         </View>
-        <View></View>
       </ScrollView>
     </SafeAreaView>
   );

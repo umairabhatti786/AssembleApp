@@ -24,12 +24,12 @@ export const styles = ScaledSheet.create({
   },
   iconContainer: {
     backgroundColor: colors.white,
-    padding: 5,
+    padding: 10,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
   },
-  icon: { height: 35, width: 35 },
+  icon: { height: 40, width: 40 },
   iconImage: { height: 50, width: 50 },
   card: { height: 100, width: 80 },
   textContainer: {
