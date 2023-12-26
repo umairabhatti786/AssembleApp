@@ -194,7 +194,7 @@ const DetailsScreen = ({ navigation, route }) => {
               fontSize={15}
             />
           </View>
-          <View style={{ backgroundColor: "red", height: 300, width: 400 }}>
+          <View style={{ height: 300, width: 400 }}>
             <MapComponent latitude={latitude} longitude={longitude} />
           </View>
         </View>

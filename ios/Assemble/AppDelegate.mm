@@ -2,11 +2,12 @@
 #import <Firebase.h>
 
 #import <React/RCTBundleURLProvider.h>
-
+#import <GoogleMaps/GoogleMaps.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyB-KsaN0xavVz_goI6TJ-rTd43B8Oz4glc"]; 
   self.moduleName = @"Assemble";
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];

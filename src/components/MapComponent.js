@@ -6,13 +6,11 @@ import {
   Linking,
   Platform,
 } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapComponent = ({ latitude, longitude, iosLink }) => {
   const GOOGLE_MAPS_APIKEY = "AIzaSyDeYRRtmStCSHXQBJxZa4t9uB_WXNO55H0";
   const handleMapPress = () => {
-    // Open Google Maps on Android
-    // Open Apple Maps on iOS
     const url = iosLink || `http://maps.apple.com/?ll=${latitude},${longitude}`;
     Linking.openURL(url);
   };
@@ -21,6 +19,10 @@ const MapComponent = ({ latitude, longitude, iosLink }) => {
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        showsUserLocation={true}
+        followUserLocation
+        loadingEnabled
+        provider={PROVIDER_GOOGLE}
         initialRegion={{
           latitude,
           longitude,
@@ -38,7 +40,10 @@ const MapComponent = ({ latitude, longitude, iosLink }) => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    flex: 1,
+    height: 400,
+    width: 400,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
