@@ -78,4 +78,13 @@ export const styles = ScaledSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  popupContainer: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    zIndex: 9999,
+  },
 });

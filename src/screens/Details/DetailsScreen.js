@@ -7,6 +7,9 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Share,
+  Alert,
+  Linking,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import commonStyles, { PH10 } from "../../utils/CommonStyles";
@@ -29,15 +32,61 @@ import {
 import DateCard from "../../components/DateCard";
 import LocationCard from "../../components/LocationCard";
 import MapComponent from "../../components/MapComponent";
+import { useFocusEffect } from "@react-navigation/native";
+import Loading from "../../components/Loading";
+import { Get_Single_Event } from "../../api/Requests";
 const DetailsScreen = ({ navigation, route }) => {
-  const item = route.params;
-  console.log("item", item);
+  const eventID = route.params?.eventId;
+  const [eventDetail, setEventDetails] = useState({});
   const latitude = 37.7749; // Replace with your latitude
   const longitude = -122.4194; // Replace with your longitude
-  const iosLink = "http://maps.apple.com/?ll=37.7749,-122.4194";
+  const [loading, setLoading] = useState(false);
   const handleGoBack = () => {
     navigation.goBack();
   };
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          "React Native | A framework for building native apps using React",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+  const openExternalLink = async () => {
+    const url = eventDetail.ticket_link;
+    await Linking.openURL(url);
+  };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchEventsDetails(eventID);
+    }, [route.params?.eventId])
+  );
+  const fetchEventsDetails = async (eventID) => {
+    setLoading(true);
+    try {
+      let response = await Get_Single_Event(eventID);
+
+      if (response.event !== undefined) {
+        setEventDetails(response.event);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const Header = () => {
     return (
       <View style={styles.headerContainer}>
@@ -67,20 +116,16 @@ const DetailsScreen = ({ navigation, route }) => {
             <UnFillHeartIcon style={styles.icon} fill={colors.black} />
           </View>
           <View style={[styles.iconContainer, { marginHorizontal: 10 }]}>
-            <UploadIcon style={styles.icon} />
+            <UploadIcon onPress={onShare} style={styles.icon} />
           </View>
         </View>
       </View>
     );
   };
+
   return (
     <SafeAreaView style={commonStyles.main}>
       <ScrollView
-        contentContainerStyle={
-          {
-            // alignItems: "center",
-          }
-        }
         style={{
           flex: 1,
           backgroundColor: colors.white,
@@ -117,25 +162,31 @@ const DetailsScreen = ({ navigation, route }) => {
                 }}
               >
                 <View style={styles.tagsContainer}>
-                  {item.tag1 && (
+                  {eventDetail.event_tags && (
                     <View style={styles.tagBody}>
                       <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>{item.tag1}</Text>
+                        <Text style={styles.tagName}>
+                          {eventDetail.event_tags}
+                        </Text>
                       </View>
                     </View>
                   )}
 
-                  {item.tag2 && (
+                  {eventDetail.event_tags && (
                     <View style={styles.tagBody}>
                       <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>{item.tag2}</Text>
+                        <Text style={styles.tagName}>
+                          {eventDetail.event_tags}
+                        </Text>
                       </View>
                     </View>
                   )}
-                  {item.tag3 && (
+                  {eventDetail.event_tags && (
                     <View style={styles.tagBody}>
                       <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>{item.tag3}</Text>
+                        <Text style={styles.tagName}>
+                          {eventDetail.event_tags}
+                        </Text>
                       </View>
                     </View>
                   )}
@@ -145,7 +196,7 @@ const DetailsScreen = ({ navigation, route }) => {
           </View>
           <View style={{ padding: 20, width: "100%" }}>
             <CustomText
-              label={item.name}
+              label={eventDetail.event_title}
               fontSize={16}
               color={colors.black}
               fontFamily={SFCompact.regular}
@@ -159,7 +210,7 @@ const DetailsScreen = ({ navigation, route }) => {
               padding: 20,
             }}
           >
-            <DateCard item={item} />
+            <DateCard item={eventDetail} />
             <View
               style={{
                 height: 1,
@@ -171,7 +222,7 @@ const DetailsScreen = ({ navigation, route }) => {
                 width: 350,
               }}
             />
-            <LocationCard item={item} />
+            <LocationCard item={eventDetail} />
           </View>
         </View>
 
@@ -190,7 +241,7 @@ const DetailsScreen = ({ navigation, route }) => {
           />
           <View>
             <CustomText
-              label={item.eventDetail}
+              label={eventDetail.event_description}
               fontFamily={SFCompact.light}
               fontSize={15}
             />
@@ -213,11 +264,27 @@ const DetailsScreen = ({ navigation, route }) => {
                 borderRadius: 20,
               }}
             >
-              <MapComponent latitude={latitude} longitude={longitude} />
+              <MapComponent
+                latitude={
+                  eventDetail?.event_location?.latitude
+                    ? eventDetail?.event_location?.latitude
+                    : latitude
+                }
+                longitude={
+                  eventDetail?.event_location?.longitude
+                    ? eventDetail?.event_location?.longitude
+                    : longitude
+                }
+                address={eventDetail?.event_location?.address}
+              />
             </View>
 
             <CustomText
-              label={item?.locationName ? item.locationName : ""}
+              label={
+                eventDetail?.event_location?.address
+                  ? eventDetail?.event_location?.address
+                  : ""
+              }
               color="#1C1916"
               fontFamily={SFCompact.light}
               fontSize={13}
@@ -236,11 +303,16 @@ const DetailsScreen = ({ navigation, route }) => {
               borderRadius={100}
               margin={20}
               fontFamily={SFCompact.semiBold}
-              // onPress={SubmitLogin}
+              onPress={openExternalLink}
             />
           </View>
         </View>
       </ScrollView>
+      {loading && (
+        <View style={[styles.popupContainer, { zIndex: 99999 }]}>
+          <Loading />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

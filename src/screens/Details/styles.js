@@ -69,4 +69,13 @@ export const styles = ScaledSheet.create({
     color: colors.black,
     fontFamily: SFCompact.regular,
   },
+  popupContainer: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    zIndex: 9999,
+  },
 });

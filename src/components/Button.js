@@ -22,7 +22,7 @@ export const Button = ({
   borderColor,
   onPressIn,
   padding,
-  textPadding,
+
   marginVertical,
   fontFamily,
 }) => {
@@ -58,7 +58,6 @@ export const Button = ({
           fontSize: fontSize,
           textAlign: "center",
           fontWeight: fontWeight,
-          textPadding: textPadding,
           fontFamily: fontFamily,
         }}
       >

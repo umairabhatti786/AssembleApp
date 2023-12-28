@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Platform, Linking } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { colors } from "../utils/colors";
@@ -7,8 +7,23 @@ import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
 
 const LocationCard = ({ item }) => {
+  const handleMapPress = () => {
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const latLng = `${item.event_location?.latitude},${item.event_location?.longitude}`;
+    const label = `${item.event_location?.address}`;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+
+    Linking.openURL(url);
+  };
   return (
     <TouchableOpacity
+      onPress={handleMapPress}
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -31,7 +46,11 @@ const LocationCard = ({ item }) => {
         </View>
         <View style={{ marginHorizontal: 10 }}>
           <CustomText
-            label={item.locationName}
+            label={
+              item.event_location?.venue_name
+                ? item.event_location.venue_name
+                : ""
+            }
             color={"#120D26"}
             fontFamily={SFCompact.light}
             fontSize={17}
@@ -45,7 +64,11 @@ const LocationCard = ({ item }) => {
           >
             <View>
               <CustomText
-                label={item.locationDetail?.pinPoint}
+                label={
+                  item.event_location?.neighborhood
+                    ? item.event_location.neighborhood
+                    : ""
+                }
                 color={"#1C1916"}
                 fontFamily={SFCompact.light}
                 fontSize={13}
@@ -63,7 +86,11 @@ const LocationCard = ({ item }) => {
             />
             <View>
               <CustomText
-                label={item.locationDetail?.hall}
+                label={
+                  item.event_location?.address
+                    ? item.event_location.address
+                    : ""
+                }
                 color={"#1C1916"}
                 fontFamily={SFCompact.light}
                 fontSize={13}

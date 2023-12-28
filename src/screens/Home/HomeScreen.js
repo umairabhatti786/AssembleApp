@@ -6,6 +6,7 @@ import {
   SectionList,
   Image,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import commonStyles, { PH10 } from "../../utils/CommonStyles";
@@ -25,13 +26,66 @@ import { Modalize } from "react-native-modalize";
 import { useFocusEffect } from "@react-navigation/native";
 import Card from "../../components/Card";
 import { SFCompact } from "../../utils/Fonts";
+import Loading from "../../components/Loading";
+import { Get_All_Events } from "../../api/Requests";
+import Button from "../../components/Button";
 const HomeScreen = ({ navigation }) => {
   const modalizeRef = useRef(null);
   const [addFavorites, setAddFavorites] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(false);
   const onHandlePress = () => {
     navigation.navigate("settings");
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAllEvents();
+    }, [])
+  );
+  const fetchAllEvents = async () => {
+    setLoading(true);
+    try {
+      let response = await Get_All_Events();
+      // console.log("response:", response);
 
+      if (Array.isArray(response.events) && response.events.length > 0) {
+        // Categorize events based on date
+        const currentDate = new Date();
+        const upcomingEvents = [];
+        const todayEvents = [];
+
+        response.events.forEach((event) => {
+          const eventDate = new Date(event.event_date);
+          if (eventDate.toDateString() === currentDate.toDateString()) {
+            todayEvents.push(event);
+          } else {
+            upcomingEvents.push(event);
+          }
+        });
+
+        // Create the data structure for SectionList
+        const sections = [];
+        if (todayEvents.length > 0) {
+          sections.push({ title: "Today", data: todayEvents });
+        }
+        if (upcomingEvents.length > 0) {
+          sections.push({ title: "Upcoming Events", data: upcomingEvents });
+        }
+
+        // Set the events state
+        setEvents(sections);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openExternalLink = async () => {
+    const url = "https://w3dv4qeze3p.typeform.com/to/BCoUhmwU";
+    await Linking.openURL(url);
+  };
   const Header = () => {
     return (
       <View style={styles.headerContainer}>
@@ -54,262 +108,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
     );
   };
-  const data = [
-    {
-      title: "Sat , April 17",
-      data: [
-        {
-          key: "1",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Wed , April 14",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag3: "Tag3",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "2",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Thursday , April 15",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "3",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Friday , April 16",
-          time: "9:00 PM",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "4",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Saturday , April 17",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "5",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Sunday , April 18",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "6",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Monday , April 18",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "7",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Tuesday , April 19",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-      ],
-    },
-    {
-      title: "Upcoming Events",
-      data: [
-        {
-          key: "1",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Wed , April 14",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag3: "Tag3",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "2",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Thursday , April 15",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "3",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Friday , April 16",
-          time: "9:00 PM",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "4",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Saturday , April 17",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "5",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Sunday , April 18",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "6",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Monday , April 18",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: false,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-        {
-          key: "7",
-          name: "Stake Jazz",
-          eventName: "Barrrio Logan",
-          img: images.card,
-          date: "Tuesday , April 19",
-          time: "9:00 PM",
-          tag1: "Tag1",
-          tag2: "Tag2",
-          tag3: "Tag3",
-          like: true,
-          locationName: "Part Time Lover ",
-          locationDetail: {
-            pinPoint: "South Park",
-            hall: "3222 W Slauson Ave ",
-          },
-          eventDetail: `Get ready, LA! This Saturday, June 3rd, we're bringing our @fic_studiosessions series to you. We're celebrating our Summer 2023 collection in partnership with @footlocker. Expect an evening of vibrant local music, fashion, and connection. This is more than a pop-up, it's a unique blend of community, style, and rhythm. Let's make it a memorable night of celebrating our shared passion for music and fashion.`,
-        },
-      ],
-    },
-  ];
+
   const renderSectionHeader = ({ section }) => (
     <View style={{ padding: 10 }}>
       <CustomText label={section.title} color={colors.black} fontSize={16} />
@@ -318,6 +117,71 @@ const HomeScreen = ({ navigation }) => {
   const renderItem = ({ section, item }) => (
     <Card item={item} navigation={navigation} />
   );
+  const footerComponent = () => {
+    return (
+      <ImageBackground
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          // top: -5,
+          // zIndex: -1000,
+        }}
+        source={images.background}
+      >
+        <View
+          style={{
+            backgroundColor: "#D9D9D9",
+            height: 200,
+            width: 370,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 10,
+            marginVertical: 20,
+          }}
+        >
+          <View style={{ marginVertical: 10 }}>
+            <ImageIcon style={styles.iconImage} />
+          </View>
+        </View>
+        <View style={{ marginVertical: 10 }}>
+          <CustomText
+            label={"Know of an event in need \nof some hype? "}
+            color={colors.black}
+            fontSize={17}
+            alignSelf="center"
+            textAlign="center"
+            fontFamily={SFCompact.regular}
+          />
+        </View>
+        <View style={{ marginVertical: 10 }}>
+          <CustomText
+            label={"Send it our way and we will \n add to  the list"}
+            color={colors.black}
+            fontSize={13}
+            alignSelf="center"
+            textAlign="center"
+            fontFamily={SFCompact.light}
+          />
+        </View>
+        <>
+          <Button
+            text={"SUBMIT EVENT"}
+            color={colors.white}
+            fontSize={14}
+            height={65}
+            width={"50%"}
+            backgroundColor={colors.black}
+            borderRadius={100}
+            margin={20}
+            fontFamily={SFCompact.regular}
+            onPress={openExternalLink}
+          />
+        </>
+      </ImageBackground>
+    );
+  };
+
   return (
     <SafeAreaView style={commonStyles.main}>
       <ImageBackground style={styles.main} source={images.background}>
@@ -367,14 +231,20 @@ const HomeScreen = ({ navigation }) => {
               />
             </View>
             <SectionList
-              sections={data}
-              keyExtractor={(item, index) => item?.key.toString()}
+              sections={events}
+              keyExtractor={(item, index) => item?._id.toString()}
               renderItem={renderItem}
               renderSectionHeader={renderSectionHeader}
+              ListFooterComponent={loading ? null : footerComponent}
             />
           </Modalize>
         </View>
       </ImageBackground>
+      {loading && (
+        <View style={[styles.popupContainer, { zIndex: 99999 }]}>
+          <Loading />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

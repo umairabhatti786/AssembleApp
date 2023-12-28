@@ -31,6 +31,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app requires access to the calendar</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
@@ -43,6 +45,8 @@
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+		<string>https</string>
+		<string>mailto</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -69,41 +73,44 @@
 	<string>Stay informed about your pets' activities and events with push notifications from Pawspact.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Montserrat-Black.ttf</string>
-		<string>Montserrat-BlackItalic.ttf</string>
-		<string>Montserrat-Bold.ttf</string>
-		<string>Montserrat-BoldItalic.ttf</string>
-		<string>Montserrat-ExtraBold.ttf</string>
-		<string>Montserrat-ExtraBoldItalic.ttf</string>
-		<string>Montserrat-ExtraLight.ttf</string>
-		<string>Montserrat-ExtraLightItalic.ttf</string>
-		<string>Montserrat-Italic.ttf</string>
-		<string>Montserrat-Light.ttf</string>
-		<string>Montserrat-LightItalic.ttf</string>
-		<string>Montserrat-Medium.ttf</string>
-		<string>Montserrat-MediumItalic.ttf</string>
-		<string>Montserrat-Regular.ttf</string>
-		<string>Montserrat-SemiBold.ttf</string>
-		<string>Montserrat-SemiBoldItalic.ttf</string>
-		<string>Montserrat-Thin.ttf</string>
-		<string>Montserrat-ThinItalic.ttf</string>
-		<string>Inter-Black.ttf</string>
-		<string>Inter-Bold.ttf</string>
-		<string>Inter-ExtraBold.ttf</string>
-		<string>Inter-ExtraLight.ttf</string>
-		<string>Inter-Light.ttf</string>
-		<string>Inter-Medium.ttf</string>
-		<string>Inter-Regular.ttf</string>
-		<string>Inter-SemiBold.ttf</string>
-		<string>Inter-Thin.ttf</string>
-		<string>Poppins-Bold.ttf</string>
-		<string>Poppins-ExtraBold.ttf</string>
-		<string>Poppins-Italic.ttf</string>
-		<string>Poppins-Light.ttf</string>
-		<string>Poppins-Medium.ttf</string>
-		<string>Poppins-Regular.ttf</string>
-		<string>Poppins-SemiBold.ttf</string>
-		<string>Poppins-Thin.ttf</string>
+		<string>SF-Compact-Text-RegularItalic.ttf</string> 
+		<string>SF-Compact.ttf</string> 
+		<string>SF-Compact-Text-UltralightItalic.ttf</string> 
+		<string>SF-Compact-Text-Ultralight.ttf</string> 
+		<string>SF-Compact-Text-ThinItalic.ttf</string>
+		<string>SF-Compact-Text-Thin.ttf</string>
+		<string>SF-Compact-Text-SemiboldItalic.ttf</string>
+		<string>SF-Compact-Text-Semibold.ttf</string>
+		<string>SF-Compact-Text-Regular.ttf</string> 
+		<string>SF-Compact-Text-MediumItalic.ttf</string> 
+		<string>SF-Compact-Text-Medium.ttf</string> 
+		<string>SF-Compact-Text-LightItalic.ttf</string>
+		<string>SF-Compact-Text-Light.ttf</string>
+		<string>SF-Compact-Text-HeavyItalic.ttf</string>
+		<string>SF-Compact-Text-Heavy.ttf</string> 
+		<string>SF-Compact-Text-BoldItalic.ttf</string> 
+		<string>SF-Compact-Text-Bold.ttf</string>
+		<string>SF-Compact-Text-BlackItalic.ttf</string>
+		<string>SF-Compact-Text-Black.ttf</string>
+		<string>SF-Compact-Rounded-Ultralight.ttf</string>
+		<string>SF-Compact-Rounded-Thin.ttf</string> 
+		<string>SF-Compact-Rounded-Semibold.ttf</string>
+		<string>SF-Compact-Rounded-Regular.ttf</string> 
+		<string>SF-Compact-Rounded-Medium.ttf</string> 
+		<string>SF-Compact-Rounded-Light.ttf</string>
+		<string>SF-Compact-Rounded-Heavy.ttf</string>
+		<string>SF-Compact-Rounded-Bold.ttf</string> 
+		<string>SF-Compact-Rounded-Black.ttf</string>
+		<string>SF-Compact-Italic.ttf</string>
+		<string>SF-Compact-Display-Ultralight.ttf</string>
+		<string>SF-Compact-Display-Thin.ttf</string>
+		<string>SF-Compact-Display-Semibold.ttf</string>
+		<string>SF-Compact-Display-Regular.ttf</string> 
+		<string>SF-Compact-Display-Medium.ttf</string>
+		<string>SF-Compact-Display-Light.ttf</string> 
+		<string>SF-Compact-Display-Heavy.ttf</string>
+		<string>SF-Compact-Display-Bold.ttf</string>
+		<string>SF-Compact-Display-Black.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

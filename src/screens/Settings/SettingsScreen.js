@@ -6,6 +6,7 @@ import {
   SectionList,
   Image,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import commonStyles, { PH10 } from "../../utils/CommonStyles";
@@ -23,6 +24,13 @@ const SettingsScreen = ({ navigation }) => {
   };
   const handleGoBack = () => {
     navigation.goBack();
+  };
+  const openEmailApp = () => {
+    const email = "info@assemble.fun";
+
+    Linking.openURL(`mailto:${email}`)
+      .then(() => console.log("Email app opened"))
+      .catch((err) => console.error("Error opening email app:", err));
   };
   const Header = () => {
     return (
@@ -104,7 +112,7 @@ const SettingsScreen = ({ navigation }) => {
                 borderRadius={100}
                 margin={20}
                 fontFamily={SFCompact.semiBold}
-                // onPress={SubmitLogin}
+                onPress={openEmailApp}
               />
             </>
             <>

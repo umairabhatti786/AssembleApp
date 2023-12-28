@@ -5,13 +5,25 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  ScrollView,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
-const MapComponent = ({ latitude, longitude, iosLink }) => {
+const MapComponent = ({ latitude, longitude, address }) => {
   const GOOGLE_MAPS_APIKEY = "AIzaSyDeYRRtmStCSHXQBJxZa4t9uB_WXNO55H0";
+
   const handleMapPress = () => {
-    const url = iosLink || `http://maps.apple.com/?ll=${latitude},${longitude}`;
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const latLng = `${latitude},${longitude}`;
+    const label = address;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+
     Linking.openURL(url);
   };
 
@@ -23,13 +35,13 @@ const MapComponent = ({ latitude, longitude, iosLink }) => {
           showsUserLocation={true}
           followUserLocation
           loadingEnabled
-          provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          // provider={PROVIDER_GOOGLE}
+          // initialRegion={{
+          //   latitude,
+          //   longitude,
+          //   latitudeDelta: 0.0922,
+          //   longitudeDelta: 0.0421,
+          // }}
         >
           <Marker coordinate={{ latitude, longitude }} />
         </MapView>

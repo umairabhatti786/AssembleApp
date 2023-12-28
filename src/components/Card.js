@@ -8,35 +8,58 @@ import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
 
 const Card = ({ item, navigation }) => {
+  const formatDate = (dateString) => {
+    const options = { weekday: "short", month: "short", day: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("details", item);
+        navigation.navigate("details", { eventId: item._id });
       }}
       style={styles.cardMain}
     >
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
-          <Image source={item.img} resizeMode="contain" style={styles.img} />
+          {item.event_image !== null ? (
+            <Image
+              source={item.event_image}
+              resizeMode="contain"
+              style={styles.img}
+            />
+          ) : (
+            <Image
+              source={images.card}
+              resizeMode="contain"
+              style={styles.img}
+            />
+          )}
         </View>
         <View style={styles.centerContainer}>
-          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.name}>{item.event_title}</Text>
 
           <View style={styles.eventContainer}>
-            <Text style={styles.eventName}>{item.eventName}</Text>
+            <Text style={styles.eventName}>
+              {item.event_location?.neighborhood}
+            </Text>
             <View style={styles.div} />
 
-            <Text style={styles.date}>{item.date}</Text>
+            <Text style={styles.date}>{formatDate(item.event_date)}</Text>
           </View>
           <View style={styles.tagsContainer}>
-            {item.tag1 && (
+            {item.event_tags && (
               <ImageBackground
                 style={styles.tagBody}
                 source={images.smallBox}
                 imageStyle={{ borderRadius: 50 }}
               >
                 <View style={{ padding: 5 }}>
-                  <Text style={styles.tagName}>{item.tag1}</Text>
+                  <Text style={styles.tagName}>{item.event_tags}</Text>
                 </View>
               </ImageBackground>
             )}
