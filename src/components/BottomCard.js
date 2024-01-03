@@ -7,8 +7,7 @@ import { FillHeartIcon, UnFillHeartIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
 
-const Card = ({ item, navigation }) => {
-  console.log(item.event_tags);
+const BottomCard = ({ item, navigation }) => {
   const formatDate = (dateString) => {
     const options = { weekday: "short", month: "short", day: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -67,49 +66,37 @@ const Card = ({ item, navigation }) => {
                   </View>
                 </ImageBackground>
               ))}
-
-            {/* {item.event_tags[1] && (
+            {/* {item.event_tags && (
               <ImageBackground
                 style={styles.tagBody}
                 source={images.smallBox}
                 imageStyle={{ borderRadius: 50 }}
               >
                 <View style={{ padding: 5 }}>
-                  <Text style={styles.tagName}>{item.event_tags[1]}</Text>
+                  <Text style={styles.tagName}>{item.event_tags}</Text>
                 </View>
               </ImageBackground>
             )}
 
-            {item.event_tags[2] && (
+            {item.tag2 && (
               <ImageBackground
                 style={styles.tagBody}
                 source={images.smallBox}
                 imageStyle={{ borderRadius: 50 }}
               >
                 <View style={{ padding: 5 }}>
-                  <Text style={styles.tagName}>{item.event_tags[2]}</Text>
+                  <Text style={styles.tagName}>{item.tag2}</Text>
                 </View>
               </ImageBackground>
             )}
-            {item.event_tags[3] && (
+            {item.tag3 && (
               <ImageBackground
                 style={styles.tagBody}
                 source={images.smallBox}
                 imageStyle={{ borderRadius: 50 }}
               >
                 <View style={{ padding: 5 }}>
-                  <Text style={styles.tagName}>{item.event_tags[3]}</Text>
-                </View>
-              </ImageBackground>
-            )}
-            {item.event_tags[4] && (
-              <ImageBackground
-                style={styles.tagBody}
-                source={images.smallBox}
-                imageStyle={{ borderRadius: 50 }}
-              >
-                <View style={{ padding: 5 }}>
-                  <Text style={styles.tagName}>{item.event_tags[4]}</Text>
+                  <Text style={styles.tagName}>{item.tag3}</Text>
                 </View>
               </ImageBackground>
             )} */}
@@ -127,10 +114,16 @@ const Card = ({ item, navigation }) => {
   );
 };
 const styles = StyleSheet.create({
-  cardMain: { marginHorizontal: 10 },
+  cardMain: {
+    marginHorizontal: 10,
+    alignContent: "center",
+    justifyContent: "center",
+    width: 380,
+    marginBottom: 30,
+  },
   cardContainer: {
     backgroundColor: "#f5f0f0",
-    // width: "100%",
+    // width: "80%",
     flexDirection: "row",
     padding: 10,
     justifyContent: "space-between",
@@ -202,4 +195,4 @@ const styles = StyleSheet.create({
   },
   fillIcon: { height: 24, width: 24 },
 });
-export default Card;
+export default BottomCard;

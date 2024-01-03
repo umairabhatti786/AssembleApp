@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { scale, ScaledSheet, verticalScale } from "react-native-size-matters";
 import { colors } from "../../utils/colors";
 import sizeHelper from "../../assets/helpers/sizeHelper";
@@ -10,7 +10,8 @@ export const styles = ScaledSheet.create({
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 10,
+    zIndex: 9999999999,
+
     marginHorizontal: 10,
     marginVertical: 20,
   },
@@ -33,7 +34,6 @@ export const styles = ScaledSheet.create({
   },
   modilizeContainer: {
     // flex: 1,
-    backgroundColor: "red",
   },
   //
   content: {
@@ -86,5 +86,38 @@ export const styles = ScaledSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     zIndex: 9999,
+    position: "absolute",
+  },
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    justifyContent: "flex-end",
+    // alignItems: "center",
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    height: "100%",
+    width: "100%",
+  },
+  text: {
+    fontSize: 20,
+    backgroundColor: "lightblue",
+  },
+
+  //
+
+  pinContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  pinImage: {
+    width: 100, // Adjust the size of your pin image
+    height: 100, // Adjust the size of your pin image
+    marginBottom: 5,
+  },
+  pinText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 14,
   },
 });
