@@ -8,8 +8,9 @@ import {
   TouchableOpacity,
   Linking,
   FlatList,
+  Dimensions,
 } from "react-native";
-import { PanGestureHandler } from "react-native-gesture-handler";
+
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import commonStyles, { PH10 } from "../../utils/CommonStyles";
@@ -39,6 +40,10 @@ const HomeScreen = ({ navigation }) => {
   const mapRef = useRef(null);
   const modalizeRef = useRef(null);
   const flatListRef = useRef(null);
+  const carouselRef = useRef(null);
+  const screenWidth = Dimensions.get("window").width;
+  const screenHeight = Dimensions.get("window").height;
+
   const [addFavorites, setAddFavorites] = useState(false);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -139,9 +144,7 @@ const HomeScreen = ({ navigation }) => {
     <Card item={item} navigation={navigation} />
   );
   const renderItemBottom = ({ section, item }) => (
-    <TouchableOpacity onPress={() => setSelectedEventIndex(index)}>
-      <BottomCard item={item} navigation={navigation} />
-    </TouchableOpacity>
+    <BottomCard item={item} navigation={navigation} />
   );
   const footerComponent = () => {
     return (
@@ -203,48 +206,26 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  const CustomMarkerComponent = ({ event }) => {
+  const CustomMarkerComponent = ({ event, onPress }) => (
     <TouchableOpacity
-      // onPress={() => {
-      //   mapRef.current.animateToRegion(
-      //     {
-      //       latitude: event.event_location?.latitude,
-      //       longitude: event.event_location?.longitude,
-      //       latitudeDelta: 1,
-      //       longitudeDelta: 1,
-      //     },
-      //     2000
-      //   );
-      //   modalizeRef.current?.close();
-      // }}
+      onPress={onPress}
       style={{
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "red",
-        height: 100,
-        width: 100,
+        // backgroundColor: "red",
+        // height: 100,
+        // width: 100,
+        zIndex: 99999999999,
+        // position: "absolute",
       }}
     >
-      {/* <Image
+      <Image
         source={images.goldenLocation}
         style={{ height: 80, width: 80 }}
         resizeMode="contain"
-      /> */}
-      <Text>{event.eventName}</Text>
-    </TouchableOpacity>;
-  };
-  const onViewableItemsChanged = ({ viewableItems, changed }) => {
-    console.log("Visible items are", viewableItems);
-    console.log("Changed in this iteration", changed);
-  };
-  // const onViewableItemsChanged = useCallback(({ viewableItems }) => {
-  //   // Update the selected event index when the visible item changes
-  //   if (viewableItems.length > 0) {
-  //     const newIndex = viewableItems[0].index;
-  //     setSelectedEventIndex(newIndex);
-  //     updateMapCenter(newIndex);
-  //   }
-  // }, []);
+      />
+    </TouchableOpacity>
+  );
 
   const updateMapCenter = (index) => {
     // Update the map center based on the latitude and longitude of the selected event
@@ -258,7 +239,7 @@ const HomeScreen = ({ navigation }) => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         },
-        500
+        3000
       );
     }
   };
@@ -266,10 +247,10 @@ const HomeScreen = ({ navigation }) => {
     const xPos =
       x.nativeEvent?.contentOffset?.x < 0 ? 0 : x.nativeEvent?.contentOffset?.x;
     const current = Math.floor(xPos / 260);
-
+    updateMapCenter(current);
     setSelectedEventIndex(current);
   };
-  console.log("selectedEventIndex", selectedEventIndex);
+
   return (
     <>
       <Header />
@@ -278,16 +259,20 @@ const HomeScreen = ({ navigation }) => {
         <MapView
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
-          style={styles.map}
-          // initialRegion={{
-          //   latitude: 24.8607,
-          //   longitude: 67.0011,
-          //   latitudeDelta: 0.0922,
-          //   longitudeDelta: 0.0421,
-          // }}
+          style={[
+            styles.map,
+            { height: !hideModelize ? "50%" : "100%", width: "100%" },
+          ]}
+          initialRegion={{
+            latitude: 32.7157,
+            longitude: -117.1611,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
           // onRegionChangeComplete={(region) => setRegion(region)}
         >
-          {eventss.length > 0 &&
+          {!loading &&
+            eventss.length > 0 &&
             eventss.map((event) => (
               <Marker
                 key={event._id}
@@ -299,7 +284,22 @@ const HomeScreen = ({ navigation }) => {
                 description={event.description}
               >
                 {/* You can customize the Marker by providing a custom component */}
-                <CustomMarkerComponent event={event} />
+                <CustomMarkerComponent
+                  event={event}
+                  onPress={() => {
+                    // Handle onPress logic, e.g., animate map or close modal
+                    mapRef.current.animateToRegion(
+                      {
+                        latitude: event.event_location?.latitude,
+                        longitude: event.event_location?.longitude,
+                        latitudeDelta: 1,
+                        longitudeDelta: 1,
+                      },
+                      2000
+                    );
+                    modalizeRef.current?.close();
+                  }}
+                />
               </Marker>
             ))}
         </MapView>
@@ -339,26 +339,15 @@ const HomeScreen = ({ navigation }) => {
         )}
 
         {hideModelize && (
-          <View style={{ flex: 1, justifyContent: "flex-end" }}>
-            <View
-              style={{
-                flexDirection: "row",
-                marginHorizontal: 10,
-                justifyContent: "space-between",
-                marginVertical: 10,
-              }}
-            >
-              <View style={{ backgroundColor: "transparent", padding: 10 }}>
+          <View style={styles.bottomView}>
+            <View style={styles.bottomContnet}>
+              <View style={styles.iconsContainer}>
                 <OptionsIcon
                   onPress={() => {
                     modalizeRef.current?.open();
                     setHideModelize(false);
                   }}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 100,
-                  }}
+                  style={styles.bottomIcon}
                   fill={"transparent"}
                 />
               </View>
@@ -374,11 +363,7 @@ const HomeScreen = ({ navigation }) => {
                     modalizeRef.current?.open();
                     setHideModelize(false);
                   }}
-                  style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 100,
-                  }}
+                  style={styles.bottomIcon}
                   fill={colors.black}
                 />
               </View>
@@ -391,7 +376,6 @@ const HomeScreen = ({ navigation }) => {
                 keyExtractor={(item, index) => item?._id.toString()}
                 renderItem={renderItemBottom}
                 horizontal={true}
-                onViewableItemsChanged={onViewableItemsChanged}
                 onScroll={onScroll}
                 viewabilityConfig={{
                   itemVisiblePercentThreshold: 50,

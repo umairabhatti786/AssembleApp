@@ -6,6 +6,7 @@ import { images } from "../assets/images";
 import { FillHeartIcon, UnFillHeartIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
+import sizeHelper from "../assets/helpers/sizeHelper";
 
 const BottomCard = ({ item, navigation }) => {
   const formatDate = (dateString) => {
@@ -16,7 +17,15 @@ const BottomCard = ({ item, navigation }) => {
     );
     return formattedDate;
   };
-
+  function truncateText(text, maxWords) {
+    const words = text.split(" ");
+    if (words.length > maxWords) {
+      const truncatedText = words.slice(0, maxWords).join(" ") + "...";
+      return truncatedText;
+    } else {
+      return text;
+    }
+  }
   return (
     <TouchableOpacity
       onPress={() => {
@@ -41,11 +50,11 @@ const BottomCard = ({ item, navigation }) => {
           )}
         </View>
         <View style={styles.centerContainer}>
-          <Text style={styles.name}>{item.event_title}</Text>
+          <Text style={styles.name}>{truncateText(item.event_title, 10)}</Text>
 
           <View style={styles.eventContainer}>
             <Text style={styles.eventName}>
-              {item.event_location?.neighborhood}
+              {truncateText(item.event_location?.neighborhood, 3)}
             </Text>
             <View style={styles.div} />
 
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignContent: "center",
     justifyContent: "center",
-    width: 380,
+    width: sizeHelper.screenWidth > 450 ? 550 : 380,
     marginBottom: 30,
   },
   cardContainer: {

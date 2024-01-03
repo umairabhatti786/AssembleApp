@@ -96,8 +96,6 @@ export const styles = ScaledSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-    height: "100%",
-    width: "100%",
   },
   text: {
     fontSize: 20,
@@ -106,18 +104,20 @@ export const styles = ScaledSheet.create({
 
   //
 
-  pinContainer: {
-    flexDirection: "column",
-    alignItems: "center",
+  bottomView: { flex: 1, justifyContent: "flex-end" },
+  bottomContnet: {
+    flexDirection: "row",
+    marginHorizontal: 10,
+    justifyContent: "space-between",
+    marginVertical: 10,
   },
-  pinImage: {
-    width: 100, // Adjust the size of your pin image
-    height: 100, // Adjust the size of your pin image
-    marginBottom: 5,
+  iconsContainer: {
+    backgroundColor: "transparent",
+    padding: sizeHelper.screenWidth > 450 ? 5 : 5,
   },
-  pinText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
+  bottomIcon: {
+    height: sizeHelper.screenWidth > 450 ? 50 : 40,
+    width: sizeHelper.screenWidth > 450 ? 50 : 40,
+    borderRadius: 100,
   },
 });

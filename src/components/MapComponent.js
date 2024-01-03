@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -6,10 +6,13 @@ import {
   Linking,
   Platform,
   ScrollView,
+  Image,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { images } from "../assets/images";
 
 const MapComponent = ({ latitude, longitude, address }) => {
+  const mapRef = useRef(null);
   const GOOGLE_MAPS_APIKEY = "AIzaSyDeYRRtmStCSHXQBJxZa4t9uB_WXNO55H0";
 
   const handleMapPress = () => {
@@ -26,11 +29,48 @@ const MapComponent = ({ latitude, longitude, address }) => {
 
     Linking.openURL(url);
   };
-
+  const CustomMarkerComponent = ({ event, onPress }) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        // backgroundColor: "red",
+        // height: 100,
+        // width: 100,
+        zIndex: 99999999999,
+        // position: "absolute",
+      }}
+    >
+      <Image
+        source={images.goldenLocation}
+        style={{ height: 80, width: 80 }}
+        resizeMode="contain"
+      />
+    </TouchableOpacity>
+  );
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
         <MapView
+          provider={PROVIDER_GOOGLE}
+          ref={mapRef}
+          style={[styles.map, { height: "100%", width: "100%" }]}
+          initialRegion={{
+            latitude: 32.7157,
+            longitude: -117.1611,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          // onRegionChangeComplete={(region) => setRegion(region)}
+        >
+          <Marker coordinate={{ latitude: latitude, longitude: longitude }}>
+            {/* You can customize the Marker by providing a custom component */}
+            <CustomMarkerComponent />
+          </Marker>
+        </MapView>
+
+        {/* <MapView
           style={styles.map}
           showsUserLocation={true}
           followUserLocation
@@ -44,7 +84,7 @@ const MapComponent = ({ latitude, longitude, address }) => {
           // }}
         >
           <Marker coordinate={{ latitude, longitude }} />
-        </MapView>
+        </MapView> */}
       </View>
       <TouchableOpacity style={styles.overlay} onPress={handleMapPress} />
     </View>

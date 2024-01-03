@@ -162,34 +162,20 @@ const DetailsScreen = ({ navigation, route }) => {
                 }}
               >
                 <View style={styles.tagsContainer}>
-                  {eventDetail.event_tags && (
-                    <View style={styles.tagBody}>
-                      <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>
-                          {eventDetail.event_tags}
-                        </Text>
-                      </View>
-                    </View>
-                  )}
-
-                  {eventDetail.event_tags && (
-                    <View style={styles.tagBody}>
-                      <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>
-                          {eventDetail.event_tags}
-                        </Text>
-                      </View>
-                    </View>
-                  )}
-                  {eventDetail.event_tags && (
-                    <View style={styles.tagBody}>
-                      <View style={{ padding: 5 }}>
-                        <Text style={styles.tagName}>
-                          {eventDetail.event_tags}
-                        </Text>
-                      </View>
-                    </View>
-                  )}
+                  {Array.isArray(eventDetail.event_tags) &&
+                    eventDetail.event_tags.length > 0 &&
+                    eventDetail.event_tags[0].split(",").map((tag) => (
+                      <ImageBackground
+                        key={tag} // Add a unique key for each tag
+                        style={styles.tagBody}
+                        source={images.smallBox}
+                        imageStyle={{ borderRadius: 50 }}
+                      >
+                        <View style={{ padding: 5 }}>
+                          <Text style={styles.tagName}>{tag}</Text>
+                        </View>
+                      </ImageBackground>
+                    ))}
                 </View>
               </View>
             </ImageBackground>
@@ -265,16 +251,8 @@ const DetailsScreen = ({ navigation, route }) => {
               }}
             >
               <MapComponent
-                latitude={
-                  eventDetail?.event_location?.latitude
-                    ? eventDetail?.event_location?.latitude
-                    : latitude
-                }
-                longitude={
-                  eventDetail?.event_location?.longitude
-                    ? eventDetail?.event_location?.longitude
-                    : longitude
-                }
+                latitude={eventDetail?.event_location?.latitude}
+                longitude={eventDetail?.event_location?.longitude}
                 address={eventDetail?.event_location?.address}
               />
             </View>

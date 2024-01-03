@@ -8,7 +8,6 @@ import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
 
 const Card = ({ item, navigation }) => {
-  console.log(item.event_tags);
   const formatDate = (dateString) => {
     const options = { weekday: "short", month: "short", day: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -17,7 +16,18 @@ const Card = ({ item, navigation }) => {
     );
     return formattedDate;
   };
-
+  function truncateText(text, maxWords) {
+    const words = text.split(" ");
+    console.log("words.length", words.length);
+    if (words.length > maxWords) {
+      const truncatedText = words.slice(0, maxWords).join(" ") + "...";
+      console.log("truncatedText", truncatedText);
+      return truncatedText;
+    } else {
+      console.log("text", text);
+      return text;
+    }
+  }
   return (
     <TouchableOpacity
       onPress={() => {
@@ -29,7 +39,7 @@ const Card = ({ item, navigation }) => {
         <View style={styles.imageContainer}>
           {item.event_image !== null ? (
             <Image
-              source={item.event_image}
+              source={{ uri: item.event_image }}
               resizeMode="contain"
               style={styles.img}
             />
@@ -46,7 +56,7 @@ const Card = ({ item, navigation }) => {
 
           <View style={styles.eventContainer}>
             <Text style={styles.eventName}>
-              {item.event_location?.neighborhood}
+              {truncateText(item.event_location?.neighborhood, 3)}
             </Text>
             <View style={styles.div} />
 
