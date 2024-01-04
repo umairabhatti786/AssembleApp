@@ -27,7 +27,7 @@ const Card = ({ item, navigation }) => {
       return text;
     }
   }
-  console.log("CARD item", item._id);
+
   return (
     <TouchableOpacity
       onPress={() => {

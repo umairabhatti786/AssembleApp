@@ -1,11 +1,26 @@
 import React from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
+import { images } from "../assets/images";
 
 const Loading = () => {
   return (
-    <View style={[styles.popupContainer, { zIndex: 99999 }]}>
-      <ActivityIndicator size="small" color={"black"} />
-    </View>
+    <ImageBackground
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      source={images.assembleLogin}
+    >
+      <View style={[styles.popupContainer, { zIndex: 99999 }]}>
+        <ActivityIndicator size="small" color={"black"} />
+      </View>
+    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({

@@ -253,24 +253,29 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  const CustomMarkerComponent = ({ event, onPress }) => (
+  const CustomMarkerComponent = ({ event }) => (
     <TouchableOpacity
-      onPress={onPress}
       style={{
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: "red",
-        // height: 100,
-        // width: 100,
         zIndex: 99999999999,
-        // position: "absolute",
       }}
     >
-      <Image
-        source={images.goldenLocation}
-        style={{ height: 80, width: 80 }}
-        resizeMode="contain"
-      />
+      {hideModelize ? (
+        <>
+          <Image
+            source={images.goldenLocation}
+            style={{ height: 80, width: 80 }}
+            resizeMode="contain"
+          />
+        </>
+      ) : (
+        <Image
+          source={images.goldenLocation}
+          style={{ height: 80, width: 80 }}
+          resizeMode="contain"
+        />
+      )}
     </TouchableOpacity>
   );
 
@@ -297,7 +302,9 @@ const HomeScreen = ({ navigation }) => {
     updateMapCenter(current);
     setSelectedEventIndex(current);
   };
-
+  const onPressMarker = () => {
+    setHideModelize(true);
+  };
   return (
     <>
       {loading ? (
@@ -307,6 +314,7 @@ const HomeScreen = ({ navigation }) => {
           <Header />
           <View style={styles.container}>
             <MapView
+              onMarkerPress={() => onPressMarker()}
               provider={PROVIDER_GOOGLE}
               ref={mapRef}
               style={[
@@ -327,29 +335,14 @@ const HomeScreen = ({ navigation }) => {
                   <Marker
                     key={event._id}
                     coordinate={{
-                      latitude: event.event_location?.latitude || 24.8607,
-                      longitude: event.event_location?.longitude || 67.0011,
+                      latitude: event.event_location.latitude,
+                      longitude: event.event_location.longitude,
                     }}
-                    title={event.title}
-                    description={event.description}
+                    title={eventss.event_title}
+                    description={eventss.event_description}
                   >
                     {/* You can customize the Marker by providing a custom component */}
-                    <CustomMarkerComponent
-                      event={event}
-                      onPress={() => {
-                        // Handle onPress logic, e.g., animate map or close modal
-                        mapRef.current.animateToRegion(
-                          {
-                            latitude: event.event_location?.latitude,
-                            longitude: event.event_location?.longitude,
-                            latitudeDelta: 1,
-                            longitudeDelta: 1,
-                          },
-                          2000
-                        );
-                        modalizeRef.current?.close();
-                      }}
-                    />
+                    <CustomMarkerComponent event={event} />
                   </Marker>
                 ))}
             </MapView>

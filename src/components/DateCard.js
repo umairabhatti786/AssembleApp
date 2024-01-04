@@ -36,14 +36,6 @@ const DateCard = ({ item }) => {
       const hasPermission = await requestCalendarPermission();
 
       if (hasPermission) {
-        // You can customize the event details here
-        const eventDetails = {
-          title: "Meeting",
-          location: "Office",
-          startDate: "2024-01-05T09:00:00.000Z", // String format
-          endDate: "2024-01-08T09:00:00.000Z", // String format
-        };
-
         const eventId = await RNCalendarEvents.saveEvent("New Event", {
           startDate: "2024-01-05T09:00:00.000Z",
           recurrenceRule: {
@@ -60,11 +52,10 @@ const DateCard = ({ item }) => {
             {
               text: "OK",
               onPress: () => {
-                // Open the calendar app using Linking
                 const calendarAppUrl =
                   Platform.OS === "ios"
-                    ? "calshow:" // iOS
-                    : "content://com.android.calendar/time/"; // Android
+                    ? "calshow:"
+                    : "content://com.android.calendar/time/";
 
                 Linking.openURL(calendarAppUrl);
               },
