@@ -7,7 +7,7 @@ import { FillHeartIcon, UnFillHeartIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
 import sizeHelper from "../assets/helpers/sizeHelper";
-
+import FastImage from "react-native-fast-image";
 const BottomCard = ({ item, navigation }) => {
   const formatDate = (dateString) => {
     const options = { weekday: "short", month: "short", day: "numeric" };
@@ -36,10 +36,10 @@ const BottomCard = ({ item, navigation }) => {
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           {item.event_image !== null ? (
-            <Image
-              source={item.event_image}
-              resizeMode="contain"
+            <FastImage
               style={styles.img}
+              source={{ uri: item.event_image }}
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : (
             <Image
@@ -112,7 +112,7 @@ const BottomCard = ({ item, navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={styles.heartContainer}>
-          {item.like === true ? (
+          {item.favEvent.isFav === true ? (
             <FillHeartIcon style={styles.fillIcon} />
           ) : (
             <UnFillHeartIcon style={styles.fillIcon} fill="#cfb34e" />

@@ -6,7 +6,7 @@ import { images } from "../assets/images";
 import { FillHeartIcon, UnFillHeartIcon } from "../assets/SVG/svg";
 import CustomText from "./CustomText";
 import { SFCompact } from "../utils/Fonts";
-
+import FastImage from "react-native-fast-image";
 const Card = ({ item, navigation }) => {
   const formatDate = (dateString) => {
     const options = { weekday: "short", month: "short", day: "numeric" };
@@ -18,16 +18,16 @@ const Card = ({ item, navigation }) => {
   };
   function truncateText(text, maxWords) {
     const words = text.split(" ");
-    console.log("words.length", words.length);
+
     if (words.length > maxWords) {
       const truncatedText = words.slice(0, maxWords).join(" ") + "...";
-      console.log("truncatedText", truncatedText);
+
       return truncatedText;
     } else {
-      console.log("text", text);
       return text;
     }
   }
+  console.log("CARD item", item._id);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -38,10 +38,10 @@ const Card = ({ item, navigation }) => {
       <View style={styles.cardContainer}>
         <View style={styles.imageContainer}>
           {item.event_image !== null ? (
-            <Image
-              source={{ uri: item.event_image }}
-              resizeMode="contain"
+            <FastImage
               style={styles.img}
+              source={{ uri: item.event_image }}
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : (
             <Image
@@ -126,7 +126,7 @@ const Card = ({ item, navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={styles.heartContainer}>
-          {item.like === true ? (
+          {item.favEvent.isFav === true ? (
             <FillHeartIcon style={styles.fillIcon} />
           ) : (
             <UnFillHeartIcon style={styles.fillIcon} fill="#cfb34e" />

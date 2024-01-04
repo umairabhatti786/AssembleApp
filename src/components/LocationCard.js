@@ -21,15 +21,7 @@ const LocationCard = ({ item }) => {
 
     Linking.openURL(url);
   };
-  function truncateText(text, maxWords) {
-    const words = text.split(" ");
-    if (words.length > maxWords) {
-      const truncatedText = words.slice(0, maxWords).join(" ") + "...";
-      return truncatedText;
-    } else {
-      return text;
-    }
-  }
+
   return (
     <TouchableOpacity
       onPress={handleMapPress}
@@ -73,7 +65,7 @@ const LocationCard = ({ item }) => {
           >
             <View>
               <CustomText
-                label={truncateText(item.event_location?.neighborhood, 3)}
+                label={item.event_location?.neighborhood}
                 color={"#1C1916"}
                 fontFamily={SFCompact.light}
                 fontSize={13}

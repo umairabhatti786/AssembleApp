@@ -24,6 +24,7 @@ import {
   BackIcon,
   CalanderIcon,
   CrossIcon,
+  FillHeartIcon,
   ForwardIcon,
   HeartIcon,
   UnFillHeartIcon,
@@ -37,9 +38,9 @@ import Loading from "../../components/Loading";
 import { Get_Single_Event } from "../../api/Requests";
 const DetailsScreen = ({ navigation, route }) => {
   const eventID = route.params?.eventId;
+  console.log(eventID);
   const [eventDetail, setEventDetails] = useState({});
-  const latitude = 37.7749; // Replace with your latitude
-  const longitude = -122.4194; // Replace with your longitude
+
   const [loading, setLoading] = useState(false);
   const handleGoBack = () => {
     navigation.goBack();
@@ -76,21 +77,50 @@ const DetailsScreen = ({ navigation, route }) => {
     setLoading(true);
     try {
       let response = await Get_Single_Event(eventID);
-
       if (response.event !== undefined) {
-        setEventDetails(response.event);
+        response.event.event_title = truncateText(
+          response.event.event_title,
+          3
+        );
+
+        response.event.event_location.neighborhood = truncateText(
+          response.event.event_location.neighborhood,
+          3
+        );
+        response.event.event_image =
+          response.event.event_image === null ||
+          response.event.event_image === undefined
+            ? images.details
+            : response.event.event_image;
+
+        // Check if event title length > 10
+
+        setTimeout(() => {
+          setEventDetails(response.event);
+          setLoading(false);
+          console.log("running stop");
+        }, 1000);
       }
     } catch (error) {
-      console.error(error);
-    } finally {
       setLoading(false);
+      console.error(error);
     }
   };
+  function truncateText(text, maxWords) {
+    const words = text.split(" ");
 
+    if (words.length > maxWords) {
+      const truncatedText = words.slice(0, maxWords).join(" ") + "...";
+
+      return truncatedText;
+    } else {
+      return text;
+    }
+  }
   const Header = () => {
     return (
       <View style={styles.headerContainer}>
-        <View style={[styles.iconContainer, , { marginHorizontal: 8 }]}>
+        <View style={[styles.iconContainer, { marginHorizontal: 8 }]}>
           <BackIcon
             onPress={handleGoBack}
             style={styles.icon}
@@ -113,7 +143,11 @@ const DetailsScreen = ({ navigation, route }) => {
           }}
         >
           <View style={styles.iconContainer}>
-            <UnFillHeartIcon style={styles.icon} fill={colors.black} />
+            {eventDetail?.favEvent?.isFav === true ? (
+              <FillHeartIcon style={styles.icon} />
+            ) : (
+              <UnFillHeartIcon style={styles.icon} fill={colors.black} />
+            )}
           </View>
           <View style={[styles.iconContainer, { marginHorizontal: 10 }]}>
             <UploadIcon onPress={onShare} style={styles.icon} />
@@ -125,171 +159,112 @@ const DetailsScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={commonStyles.main}>
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: colors.white,
-        }}
-      >
-        <View
-          style={{
-            justifyContent: "center",
-            // marginVertical: 10,
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              marginHorizontal: 20,
-              justifyContent: "center",
-              alignItems: "center",
-              marginVertical: 10,
-            }}
-          >
-            <ImageBackground
-              style={styles.flex}
-              source={images.details}
-              imageStyle={{ borderRadius: 20, height: 300, width: "100%" }}
-              resizeMode="cover"
-            >
-              <Header />
-              <View
-                style={{
-                  top: 150,
-                  left: 10,
-                  right: 0,
-                }}
+      {loading ? (
+        <Loading />
+      ) : (
+        <ScrollView style={styles.scroll}>
+          <View style={styles.scollInner}>
+            <View style={styles.scrollContainer}>
+              <ImageBackground
+                style={styles.flex}
+                source={eventDetail.event_image}
+                imageStyle={{ borderRadius: 20, height: 300, width: "100%" }}
+                resizeMode="cover"
               >
-                <View style={styles.tagsContainer}>
-                  {Array.isArray(eventDetail.event_tags) &&
-                    eventDetail.event_tags.length > 0 &&
-                    eventDetail.event_tags[0].split(",").map((tag) => (
-                      <ImageBackground
-                        key={tag} // Add a unique key for each tag
-                        style={styles.tagBody}
-                        source={images.smallBox}
-                        imageStyle={{ borderRadius: 50 }}
-                      >
-                        <View style={{ padding: 5 }}>
-                          <Text style={styles.tagName}>{tag}</Text>
-                        </View>
-                      </ImageBackground>
-                    ))}
-                </View>
-              </View>
-            </ImageBackground>
-          </View>
-          <View style={{ padding: 20, width: "100%" }}>
-            <CustomText
-              label={eventDetail.event_title}
-              fontSize={16}
-              color={colors.black}
-              fontFamily={SFCompact.regular}
-            />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              backgroundColor: colors.white,
-              padding: 20,
-            }}
-          >
-            <DateCard item={eventDetail} />
-            <View
-              style={{
-                height: 1,
-                backgroundColor: "#F0EBD9",
-                marginHorizontal: 20,
-                borderWidth: 0.5,
-                marginVertical: 10,
-                borderColor: "#F0EBD9",
-                width: 350,
-              }}
-            />
-            <LocationCard item={eventDetail} />
-          </View>
-        </View>
+                {!loading && <Header />}
 
-        <View
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            backgroundColor: colors.white,
-            padding: 20,
-          }}
-        >
-          <CustomText
-            label="Event Detail"
-            fontFamily={SFCompact.semiBold}
-            fontSize={15}
-          />
-          <View>
-            <CustomText
-              label={eventDetail.event_description}
-              fontFamily={SFCompact.light}
-              fontSize={15}
-            />
-          </View>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "#F8F8F8",
-              justifyContent: "center",
-              // alignItems: "center",
-              borderRadius: 20,
-            }}
-          >
-            <View
-              style={{
-                height: 400,
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 20,
-              }}
-            >
-              <MapComponent
-                latitude={eventDetail?.event_location?.latitude}
-                longitude={eventDetail?.event_location?.longitude}
-                address={eventDetail?.event_location?.address}
+                <View
+                  style={{
+                    top: 150,
+                    left: 10,
+                    right: 0,
+                  }}
+                >
+                  <View style={styles.tagsContainer}>
+                    {Array.isArray(eventDetail.event_tags) &&
+                      eventDetail.event_tags.length > 0 &&
+                      eventDetail.event_tags[0].split(",").map((tag) => (
+                        <ImageBackground
+                          key={tag} // Add a unique key for each tag
+                          style={styles.tagBody}
+                          source={images.smallBox}
+                          imageStyle={{ borderRadius: 50 }}
+                        >
+                          <View style={{ padding: 5 }}>
+                            <Text style={styles.tagName}>{tag}</Text>
+                          </View>
+                        </ImageBackground>
+                      ))}
+                  </View>
+                </View>
+              </ImageBackground>
+            </View>
+            <View style={styles.eventHeader}>
+              <CustomText
+                label={eventDetail.event_title}
+                fontSize={16}
+                color={colors.black}
+                fontFamily={SFCompact.regular}
               />
             </View>
+            <View style={styles.cardsContainer}>
+              <DateCard item={eventDetail} />
+              <View style={styles.divider} />
+              <LocationCard item={eventDetail} />
+            </View>
+          </View>
 
+          <View style={styles.detailsContainer}>
             <CustomText
-              label={
-                eventDetail?.event_location?.address
-                  ? eventDetail?.event_location?.address
-                  : ""
-              }
-              color="#1C1916"
-              fontFamily={SFCompact.light}
-              fontSize={13}
-              textAlign="center"
-              alignSelf="center"
-            />
-          </View>
-          <View style={{ marginVertical: 10 }}>
-            <Button
-              text={"GET TICKETS"}
-              color={colors.white}
-              fontSize={17}
-              height={65}
-              width={"100%"}
-              backgroundColor={"#080808"}
-              borderRadius={100}
-              margin={20}
+              label="Event Detail"
               fontFamily={SFCompact.semiBold}
-              onPress={openExternalLink}
+              fontSize={15}
             />
+            <View>
+              <CustomText
+                label={eventDetail.event_description}
+                fontFamily={SFCompact.light}
+                fontSize={15}
+              />
+            </View>
+            <View style={styles.mapContainer}>
+              <View style={styles.innerMapContainer}>
+                <MapComponent
+                  latitude={eventDetail?.event_location?.latitude}
+                  longitude={eventDetail?.event_location?.longitude}
+                  address={eventDetail?.event_location?.address}
+                />
+              </View>
+
+              <CustomText
+                label={
+                  eventDetail?.event_location?.address
+                    ? eventDetail?.event_location?.address
+                    : ""
+                }
+                color="#1C1916"
+                fontFamily={SFCompact.light}
+                fontSize={13}
+                textAlign="center"
+                alignSelf="center"
+              />
+            </View>
+            <View style={{ marginVertical: 10 }}>
+              <Button
+                text={"GET TICKETS"}
+                color={colors.white}
+                fontSize={17}
+                height={65}
+                width={"100%"}
+                backgroundColor={"#080808"}
+                borderRadius={100}
+                margin={20}
+                fontFamily={SFCompact.semiBold}
+                onPress={openExternalLink}
+              />
+            </View>
           </View>
-        </View>
-      </ScrollView>
-      {loading && (
-        <View style={[styles.popupContainer, { zIndex: 99999 }]}>
-          <Loading />
-        </View>
+        </ScrollView>
       )}
     </SafeAreaView>
   );

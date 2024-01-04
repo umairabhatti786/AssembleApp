@@ -1,4 +1,4 @@
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform, Alert, Linking } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native";
 import { colors } from "../utils/colors";
@@ -40,19 +40,39 @@ const DateCard = ({ item }) => {
         const eventDetails = {
           title: "Meeting",
           location: "Office",
-          startDate: "2023-12-31T09:00:00.000Z", // String format
-          endDate: "2023-12-31T10:00:00.000Z", // String format
+          startDate: "2024-01-05T09:00:00.000Z", // String format
+          endDate: "2024-01-08T09:00:00.000Z", // String format
         };
 
         const eventId = await RNCalendarEvents.saveEvent("New Event", {
-          startDate: "2023-12-31T09:00:00.000Z",
+          startDate: "2024-01-05T09:00:00.000Z",
           recurrenceRule: {
             frequency: "weekly",
             occurrence: 52,
             interval: 2,
-            endDate: "2017-08-19T19:26:00.000Z",
+            endDate: "2024-01-08T09:00:00.000Z",
           },
         });
+        Alert.alert(
+          "Event Added",
+          "The event has been added to your calendar. To view the event, open your calendar app.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                // Open the calendar app using Linking
+                const calendarAppUrl =
+                  Platform.OS === "ios"
+                    ? "calshow:" // iOS
+                    : "content://com.android.calendar/time/"; // Android
+
+                Linking.openURL(calendarAppUrl);
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+
         console.log("Event added successfully. Event ID:", eventId);
       } else {
         console.log("Calendar permission not granted");

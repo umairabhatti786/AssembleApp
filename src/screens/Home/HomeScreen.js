@@ -74,15 +74,25 @@ const HomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       let response = await Get_All_Events();
-
       if (Array.isArray(response.events) && response.events.length > 0) {
-        setEventss(response.events);
+        const modifiedEvents = response.events.map((event) => {
+          event.event_title = truncateText(event.event_title, 3);
+
+          event.event_location.neighborhood = truncateText(
+            event.event_location.neighborhood,
+            3
+          );
+
+          return event;
+        });
+
+        setEventss(modifiedEvents);
 
         const currentDate = new Date();
         const upcomingEvents = [];
         const todayEvents = [];
 
-        response.events.forEach((event) => {
+        modifiedEvents.forEach((event) => {
           const eventDate = new Date(event.event_date);
           if (eventDate.toDateString() === currentDate.toDateString()) {
             todayEvents.push(event);
@@ -101,13 +111,50 @@ const HomeScreen = ({ navigation }) => {
 
         setEvents(sections);
       }
+
+      // if (Array.isArray(response.events) && response.events.length > 0) {
+      //   setEventss(response.events);
+
+      //   const currentDate = new Date();
+      //   const upcomingEvents = [];
+      //   const todayEvents = [];
+
+      //   response.events.forEach((event) => {
+      //     const eventDate = new Date(event.event_date);
+      //     if (eventDate.toDateString() === currentDate.toDateString()) {
+      //       todayEvents.push(event);
+      //     } else {
+      //       upcomingEvents.push(event);
+      //     }
+      //   });
+
+      //   const sections = [];
+      //   if (todayEvents.length > 0) {
+      //     sections.push({ title: "Today", data: todayEvents });
+      //   }
+      //   if (upcomingEvents.length > 0) {
+      //     sections.push({ title: "Upcoming Events", data: upcomingEvents });
+      //   }
+
+      //   setEvents(sections);
+      // }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+  function truncateText(text, maxWords) {
+    const words = text.split(" ");
 
+    if (words.length > maxWords) {
+      const truncatedText = words.slice(0, maxWords).join(" ") + "...";
+
+      return truncatedText;
+    } else {
+      return text;
+    }
+  }
   const openExternalLink = async () => {
     const url = "https://w3dv4qeze3p.typeform.com/to/BCoUhmwU";
     await Linking.openURL(url);
@@ -253,142 +300,142 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <Header />
-
-      <View style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          ref={mapRef}
-          style={[
-            styles.map,
-            { height: !hideModelize ? "50%" : "100%", width: "100%" },
-          ]}
-          initialRegion={{
-            latitude: 32.7157,
-            longitude: -117.1611,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          // onRegionChangeComplete={(region) => setRegion(region)}
-        >
-          {!loading &&
-            eventss.length > 0 &&
-            eventss.map((event) => (
-              <Marker
-                key={event._id}
-                coordinate={{
-                  latitude: event.event_location?.latitude || 24.8607,
-                  longitude: event.event_location?.longitude || 67.0011,
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Header />
+          <View style={styles.container}>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              ref={mapRef}
+              style={[
+                styles.map,
+                { height: !hideModelize ? "50%" : "100%", width: "100%" },
+              ]}
+              initialRegion={{
+                latitude: 32.7157,
+                longitude: -117.1611,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              // onRegionChangeComplete={(region) => setRegion(region)}
+            >
+              {!loading &&
+                eventss.length > 0 &&
+                eventss.map((event) => (
+                  <Marker
+                    key={event._id}
+                    coordinate={{
+                      latitude: event.event_location?.latitude || 24.8607,
+                      longitude: event.event_location?.longitude || 67.0011,
+                    }}
+                    title={event.title}
+                    description={event.description}
+                  >
+                    {/* You can customize the Marker by providing a custom component */}
+                    <CustomMarkerComponent
+                      event={event}
+                      onPress={() => {
+                        // Handle onPress logic, e.g., animate map or close modal
+                        mapRef.current.animateToRegion(
+                          {
+                            latitude: event.event_location?.latitude,
+                            longitude: event.event_location?.longitude,
+                            latitudeDelta: 1,
+                            longitudeDelta: 1,
+                          },
+                          2000
+                        );
+                        modalizeRef.current?.close();
+                      }}
+                    />
+                  </Marker>
+                ))}
+            </MapView>
+            {hideModelize === false && (
+              <Modalize
+                modalStyle={{
+                  backgroundColor: "#FFFFFF",
+                  flex: 1,
+                  // position: "absolute",
+                  width: "100%",
                 }}
-                title={event.title}
-                description={event.description}
+                ref={modalizeRef}
+                alwaysOpen={sizeHelper.screenWidth > 450 ? 550 : 490}
+                useNativeDriver={true}
+                modalHeight={700}
+                handlePosition="inside"
+                panGestureComponentProps={{ enabled: true }}
               >
-                {/* You can customize the Marker by providing a custom component */}
-                <CustomMarkerComponent
-                  event={event}
-                  onPress={() => {
-                    // Handle onPress logic, e.g., animate map or close modal
-                    mapRef.current.animateToRegion(
-                      {
-                        latitude: event.event_location?.latitude,
-                        longitude: event.event_location?.longitude,
-                        latitudeDelta: 1,
-                        longitudeDelta: 1,
-                      },
-                      2000
-                    );
-                    modalizeRef.current?.close();
-                  }}
+                <View style={styles.content}>
+                  <CustomText
+                    label="Events in San Diego"
+                    color={colors.black}
+                    fontSize={16}
+                    alignSelf="center"
+                    textAlign="center"
+                    fontFamily={SFCompact.semiBold}
+                  />
+                </View>
+                <SectionList
+                  sections={events}
+                  keyExtractor={(item, index) => item?._id.toString()}
+                  renderItem={renderItem}
+                  renderSectionHeader={renderSectionHeader}
+                  ListFooterComponent={loading ? null : footerComponent}
                 />
-              </Marker>
-            ))}
-        </MapView>
-        {hideModelize === false && (
-          <Modalize
-            modalStyle={{
-              backgroundColor: "#FFFFFF",
-              flex: 1,
-              // position: "absolute",
-              width: "100%",
-            }}
-            ref={modalizeRef}
-            alwaysOpen={sizeHelper.screenWidth > 450 ? 550 : 490}
-            useNativeDriver={true}
-            modalHeight={700}
-            handlePosition="inside"
-            panGestureComponentProps={{ enabled: true }}
-          >
-            <View style={styles.content}>
-              <CustomText
-                label="Events in San Diego"
-                color={colors.black}
-                fontSize={16}
-                alignSelf="center"
-                textAlign="center"
-                fontFamily={SFCompact.semiBold}
-              />
-            </View>
-            <SectionList
-              sections={events}
-              keyExtractor={(item, index) => item?._id.toString()}
-              renderItem={renderItem}
-              renderSectionHeader={renderSectionHeader}
-              ListFooterComponent={loading ? null : footerComponent}
-            />
-          </Modalize>
-        )}
+              </Modalize>
+            )}
 
-        {hideModelize && (
-          <View style={styles.bottomView}>
-            <View style={styles.bottomContnet}>
-              <View style={styles.iconsContainer}>
-                <OptionsIcon
-                  onPress={() => {
-                    modalizeRef.current?.open();
-                    setHideModelize(false);
-                  }}
-                  style={styles.bottomIcon}
-                  fill={"transparent"}
-                />
-              </View>
-              <View
-                style={{
-                  backgroundColor: "#f5f0f0",
-                  padding: 5,
-                  borderRadius: 100,
-                }}
-              >
-                <OptionsIcon
-                  onPress={() => {
-                    modalizeRef.current?.open();
-                    setHideModelize(false);
-                  }}
-                  style={styles.bottomIcon}
-                  fill={colors.black}
-                />
-              </View>
-            </View>
+            {hideModelize && (
+              <View style={styles.bottomView}>
+                <View style={styles.bottomContnet}>
+                  <View style={styles.iconsContainer}>
+                    <OptionsIcon
+                      onPress={() => {
+                        modalizeRef.current?.open();
+                        setHideModelize(false);
+                      }}
+                      style={styles.bottomIcon}
+                      fill={"transparent"}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#f5f0f0",
+                      padding: 5,
+                      borderRadius: 100,
+                    }}
+                  >
+                    <OptionsIcon
+                      onPress={() => {
+                        modalizeRef.current?.open();
+                        setHideModelize(false);
+                      }}
+                      style={styles.bottomIcon}
+                      fill={colors.black}
+                    />
+                  </View>
+                </View>
 
-            <View>
-              <FlatList
-                ref={flatListRef}
-                data={eventss}
-                keyExtractor={(item, index) => item?._id.toString()}
-                renderItem={renderItemBottom}
-                horizontal={true}
-                onScroll={onScroll}
-                viewabilityConfig={{
-                  itemVisiblePercentThreshold: 50,
-                }}
-              />
-            </View>
+                <View>
+                  <FlatList
+                    ref={flatListRef}
+                    data={eventss}
+                    keyExtractor={(item, index) => item?._id.toString()}
+                    renderItem={renderItemBottom}
+                    horizontal={true}
+                    onScroll={onScroll}
+                    viewabilityConfig={{
+                      itemVisiblePercentThreshold: 50,
+                    }}
+                  />
+                </View>
+              </View>
+            )}
           </View>
-        )}
-      </View>
-      {loading && (
-        <View style={[styles.popupContainer, { zIndex: 99999 }]}>
-          <Loading />
-        </View>
+        </>
       )}
     </>
   );
